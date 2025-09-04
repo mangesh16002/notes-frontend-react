@@ -1,26 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { getPublicNote } from '../api'
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import axios from 'axios';
 
-export default function SharedNote(){
-  const { token } = useParams()
-  const [note, setNote] = useState(null)
-  const [error, setError] = useState('')
+export default function SharedNote() {
+  const { token } = useParams();
+  const [note, setNote] = useState(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    async function load(){
+    async function load() {
       try {
-        const res = await getPublicNote(token)
-        setNote(res.data)
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE}/public/${token}`);
+        setNote(res.data);
       } catch (e) {
-        setError('Note not found or link expired.')
+        setError('Note not found or link expired.');
       }
     }
-    load()
-  }, [token])
+    load();
+  }, [token]);
 
-  if(error) return <div className="container"><p>{error}</p><Link to="/">Back</Link></div>
-  if(!note) return <div className="container"><p>Loading...</p></div>
+  if (error) {
+    return (
+      <div className="container">
+        <p>{error}</p>
+        <Link to="/">← Back to app</Link>
+      </div>
+    );
+  }
+
+  if (!note) {
+    return (
+      <div className="container">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
@@ -30,5 +44,5 @@ export default function SharedNote(){
       </div>
       <Link to="/">← Back to app</Link>
     </div>
-  )
+  );
 }
