@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { listNotes, createNote, updateNote, deleteNote, shareNote } from '../api'
-import { Link } from 'react-router-dom'
 
-export default function App(){
+export default function NotesApp() {
   const [notes, setNotes] = useState([])
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
